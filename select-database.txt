@@ -29,3 +29,7 @@ AND HOUR(`hour`) >= '14:00:00';
 SELECT * 
 FROM `degrees` 
 WHERE `level` = 'magistrale';
+
+**PUNTO 7**
+SELECT COUNT(*) AS `dipartimenti`
+FROM `departments`;
