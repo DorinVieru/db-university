@@ -14,12 +14,30 @@ WHERE `departments`.`name`LIKE 'Dipartimento di Neuroscienze'
 AND `degrees`.`level` LIKE 'magistrale';
 
 **PUNTO 3** - Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
-
+SELECT `courses`.`name`, `courses`.`description` 
+FROM `courses` 
+INNER JOIN `course_teacher` ON `course_teacher`.`course_id` = `courses`.`id`
+AND `course_teacher`.`teacher_id` = '44';
 
 **PUNTO 4** - Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il relativo dipartimento, in ordine alfabetico per cognome e nome
-
+SELECT `students`.`id`,`students`.`name` , `students`.`surname`, `degrees`.`name` AS `corso_di_laurea`, `degrees`.`level` AS `durata_corso_laurea`,`degrees`.`address` AS `locazione_corso_laurea`,`degrees`.`website` AS `sito_corso_laurea`,`degrees`.`email` AS `email_corso_laurea`,`departments`.`name` AS `dipartimento` 
+FROM `students` 
+JOIN `degrees` ON `degrees`.`id` = `students`.`degree_id` 
+JOIN `departments`ON `departments`.`id`= `degrees`.`department_id` 
+ORDER BY `students`.`surname` ASC,`students`.`name` ASC;
 
 **PUNTO 5** - Selezionare tutti i corsi di laurea con i relativi corsi e insegnant
-
+SELECT `degrees`.`name` AS `corso_di_laurea`, `courses`.`name` AS `nome_corso`, `teachers`.`name` AS `nome_insegnante`, `teachers`.`surname` AS `cognome_insengante`
+FROM `degrees` 
+JOIN `courses` ON `courses`.`degree_id` = `degrees`.`id`
+JOIN `course_teacher` ON `course_teacher`.`course_id` = `courses`.`id`
+JOIN `teachers` ON `course_teacher`.`teacher_id` = `teachers`.`id`;
 
 **PUNTO 6** - Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
+SELECT DISTINCT(`teachers`.`id`), `teachers`.`name` AS `nome_insegnante`, `teachers`.`surname` AS `cognome_insegnante`, `departments`.`name` AS `dipartimento`
+FROM `teachers`
+JOIN `course_teacher` ON `course_teacher`.`teacher_id` = `teachers`.`id`
+JOIN `courses` ON `course_teacher`.`course_id` = `courses`.`id`
+JOIN `degrees` ON `courses`.`degree_id` = `degrees`.`id`
+JOIN `departments` ON `degrees`.`department_id` = `departments`.`id`
+WHERE `departments`.`name` LIKE 'Dipartimento di Matematica';
